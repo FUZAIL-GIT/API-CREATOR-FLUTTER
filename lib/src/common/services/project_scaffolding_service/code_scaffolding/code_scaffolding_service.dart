@@ -52,20 +52,18 @@ class CodeScaffoldingService extends GetxController {
         homeController.updateCurrentStatus(Status.LOADING);
         await projectSetup(
             projectName: projectName,
-            isAutomaticallyInstallPackages: isInstallPackages);
-        await createFolderStructure(
-          attributes: attributes,
-          collections: collections,
-          mongoDbUrl: mongoDbUrl,
-          projectName: projectName,
-          serverAuthentication: serverAuthentication,
-          isTimestamp: isTimestamp,
-          isPagination: isPagination,
-          isOpenInVsCode: isOpenInVsCode,
-        );
-        log("folder Structure created");
+            isAutomaticallyInstallPackages: isInstallPackages,
+            attributes: attributes,
+            collections: collections,
+            mongoDbUrl: mongoDbUrl,
+            serverAuthentication: serverAuthentication,
+            isTimestamp: isTimestamp,
+            isPagination: isPagination,
+            isOpenInVsCode: isOpenInVsCode,
+            isInstallPackages: isInstallPackages);
       } else {
         log("folder with this name already exist");
+        homeController.throwError('folder with this name alread exist');
       }
     } catch (e) {
       log('', error: e);
@@ -74,6 +72,14 @@ class CodeScaffoldingService extends GetxController {
 
   Future<void> projectSetup(
       {required String projectName,
+      required List<Collection> collections,
+      required List<Field> attributes,
+      required String mongoDbUrl,
+      required bool isTimestamp,
+      required bool isPagination,
+      required bool isOpenInVsCode,
+      required bool isInstallPackages,
+      required ServerAuthentication serverAuthentication,
       required bool isAutomaticallyInstallPackages}) async {
     // project root directory path
     workingDirectory = '${downloadDirectoryPath!.path}\\$projectName';
@@ -83,27 +89,43 @@ class CodeScaffoldingService extends GetxController {
 
     //intialize as a node project
     await runCommand(workingDirectory: workingDirectory, command: 'npm init -y')
-        .then((value) {
+        .then((value) async {
       if (value) {
         log('npm initialized');
         homeController.updateCurrentStatus(Status.INITIALIZED);
-      } else {}
+        if (isAutomaticallyInstallPackages) {
+          await runCommand(
+                  workingDirectory: workingDirectory,
+                  command:
+                      'npm install express mongoose body-parser swagger-ui-express yamljs --save')
+              .then((value) async {
+            if (value) {
+              log('npm packages installed');
+              await createFolderStructure(
+                attributes: attributes,
+                collections: collections,
+                mongoDbUrl: mongoDbUrl,
+                projectName: projectName,
+                serverAuthentication: serverAuthentication,
+                isTimestamp: isTimestamp,
+                isPagination: isPagination,
+                isOpenInVsCode: isOpenInVsCode,
+              ).then((value) {
+                if (value) {
+                  log("folder Structure created");
+                }
+              });
+              homeController.updateCurrentStatus(Status.INSTALLED);
+            } else {}
+          });
+        }
+      } else {
+        homeController.throwError('npm not installed');
+      }
     }); //installing packages
-    if (isAutomaticallyInstallPackages) {
-      await runCommand(
-              workingDirectory: workingDirectory,
-              command:
-                  'npm install express mongoose body-parser swagger-ui-express yamljs --save')
-          .then((value) {
-        if (value) {
-          log('npm packages installed');
-          homeController.updateCurrentStatus(Status.INSTALLED);
-        } else {}
-      });
-    }
   }
 
-  Future<void> createFolderStructure({
+  Future<bool> createFolderStructure({
     required String projectName,
     required String mongoDbUrl,
     required List<Collection> collections,
@@ -183,7 +205,9 @@ class CodeScaffoldingService extends GetxController {
     File configFile = File('${projectDir.path}\\config\\config.js');
     configFile.writeAsStringSync(
         dataService.mongoDbConfig(mongoDbUrl, serverAuthentication));
+    log(homeController.currentStatus.name);
     homeController.updateCurrentStatus(Status.COMPLETED);
+    log(homeController.currentStatus.name);
     if (isOpenInVsCode) {
       runCommand(workingDirectory: workingDirectory, command: 'code .')
           .then((value) {
@@ -192,5 +216,6 @@ class CodeScaffoldingService extends GetxController {
         } else {}
       });
     }
+    return true;
   }
 }

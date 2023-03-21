@@ -280,6 +280,7 @@ class HomeController extends GetxController {
   GlobalKey<FormState> passwordKey = GlobalKey<FormState>();
   TextEditingController projectName = TextEditingController();
   GlobalKey<FormState> projectNameKey = GlobalKey<FormState>();
+  RxString errorMessage = ''.obs;
   Stopwatch stopwatch = Stopwatch();
   final RxBool _automaticallyInstallPackages = true.obs;
   final RxBool _openInVsCode = true.obs;
@@ -335,21 +336,23 @@ class HomeController extends GetxController {
               Visibility(
                 visible: progressIndicatorPercentage.value == 1.0,
                 replacement: const Text('Creating...'),
-                child: RichText(
-                  text: TextSpan(
-                    text: 'Created in ',
-                    children: [
-                      TextSpan(
-                          text: (stopwatch.elapsedMilliseconds / 1000)
-                              .toStringAsFixed(2),
-                          style: const TextStyle(
-                            color: Colors.cyanAccent,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      const TextSpan(text: ' seconds')
-                    ],
-                  ),
-                ),
+                child: _currentStatus.value == Status.FAIL
+                    ? Text(errorMessage.value)
+                    : RichText(
+                        text: TextSpan(
+                          text: 'Created in ',
+                          children: [
+                            TextSpan(
+                                text: (stopwatch.elapsedMilliseconds / 1000)
+                                    .toStringAsFixed(2),
+                                style: const TextStyle(
+                                  color: Colors.cyanAccent,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                            const TextSpan(text: ' seconds')
+                          ],
+                        ),
+                      ),
               ),
               const SizedBox(
                 height: 15,
@@ -357,18 +360,22 @@ class HomeController extends GetxController {
               CircularPercentIndicator(
                 radius: 100.0,
                 lineWidth: 17.0,
-                percent: progressIndicatorPercentage.value,
+                percent: _currentStatus.value == Status.FAIL
+                    ? 1.0
+                    : progressIndicatorPercentage.value,
                 center: Text(
-                  _currentStatus.value == Status.LOADING
-                      ? "npm initializing"
-                      : _currentStatus.value == Status.INITIALIZED
-                          ? "npm install packages"
-                          : _currentStatus.value == Status.COMPLETED
-                              ? "Project Created \nSuccessfully"
-                              : '',
+                  _currentStatus.value == Status.FAIL
+                      ? 'FAILED'
+                      : _currentStatus.value == Status.LOADING
+                          ? "npm initializing"
+                          : _currentStatus.value == Status.INITIALIZED
+                              ? "npm install packages"
+                              : 'Project Created \nSuccessfully',
                   textAlign: TextAlign.center,
                 ),
-                progressColor: Colors.deepPurpleAccent,
+                progressColor: _currentStatus.value == Status.FAIL
+                    ? Colors.red
+                    : Colors.deepPurpleAccent,
                 animation: true,
                 animationDuration: 1000,
                 animateFromLastPercent: true,
@@ -394,7 +401,6 @@ class HomeController extends GetxController {
 
   void updateCurrentStatus(Status value) {
     // handle logic for changing status
-
     _currentStatus.value = value;
     if (value == Status.LOADING) {
       progressIndicatorPercentage.value = 0.3;
@@ -407,8 +413,12 @@ class HomeController extends GetxController {
       progressIndicatorPercentage.value = 1.0;
       stopwatch.stop();
     }
+  }
 
-    log('$value / $progressIndicatorPercentage');
+  void throwError(String error) {
+    _currentStatus.value = Status.FAIL;
+    errorMessage.value = error;
+    progressIndicatorPercentage.value = 1.0;
   }
 
 // for testing purpose
