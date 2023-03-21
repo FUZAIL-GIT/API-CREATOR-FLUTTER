@@ -399,6 +399,12 @@ class HomeController extends GetxController {
         ));
   }
 
+  void timeOutFunction({required Duration timeOutDuration}) {
+    Future.delayed(timeOutDuration, () {
+      throwError('Timeout');
+    });
+  }
+
   void updateCurrentStatus(Status value) {
     // handle logic for changing status
     _currentStatus.value = value;
