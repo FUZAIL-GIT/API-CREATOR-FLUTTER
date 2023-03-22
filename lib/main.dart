@@ -1,8 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:node_server_maker/src/common/routes/routes.dart';
+import 'src/common/routes/app_pages.dart';
 import 'src/common/style/theme.dart';
-import 'src/pages/home_page/view.dart';
 
 void main() async => runApp(const MyApp());
 
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
       darkTheme: AppTheme.darkTheme,
       theme: AppTheme.lightTheme,
       themeMode: ThemeMode.dark,
-      home: const HomeScreen(),
+      getPages: AppPages.routes,
+      initialRoute: AppRoutes.DASHBOARD,
     );
   }
 }

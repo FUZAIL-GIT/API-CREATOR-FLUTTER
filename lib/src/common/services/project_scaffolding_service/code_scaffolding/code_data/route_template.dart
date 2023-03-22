@@ -2,7 +2,7 @@ import 'package:node_server_maker/src/common/extensions/extension.dart';
 
 import '../../../../../pages/home_page/model.dart';
 
-String createRouteTemplate(
+String createAppRouteTemplate(
   List<Collection> collection,
   List<Field> attributes,
 ) {
@@ -10,54 +10,102 @@ String createRouteTemplate(
     String data = '';
     for (var element in collection) {
       data += '''
-    const ${element.collectionName.capitalize()} = require("../controller/${element.collectionName.uncapitalize()}_controller.js"); \n''';
+    const {${element.collectionName.uncapitalize()}Routes} = require("../routes/${element.collectionName.uncapitalize()}_routes.js"); \n''';
     }
+    return data;
+  }
+
+  String appRoutes() {
+    String data = '';
+    for (var element in collection) {
+      data += "${element.collectionName.uncapitalize()}Routes(router)\n";
+    }
+    return data;
+  }
+//   String routes() {
+//     String data = '';
+//     for (var element in collection) {
+//       data += '''
+//  // Create a new ${element.collectionName}
+//   router.post("/${element.collectionName.uncapitalize()}/post", jsonParser ,${element.collectionName.capitalize()}.create);
+
+//   // Retrieve all ${element.collectionName}
+//   router.get("/${element.collectionName.uncapitalize()}/get", ${element.collectionName.capitalize()}.findAll);
+
+//   // Retrieve a single ${element.collectionName} with id
+//   router.get("/${element.collectionName.uncapitalize()}/get/:id", ${element.collectionName.capitalize()}.findOne);
+
+//   // Update a ${element.collectionName} with id
+//   router.put("/${element.collectionName.uncapitalize()}/update/:id", ${element.collectionName.capitalize()}.update);
+
+//   // Delete a ${element.collectionName} with id
+//   router.delete("/${element.collectionName.uncapitalize()}/delete/:id", ${element.collectionName.capitalize()}.delete);
+
+//   // Delete all ${element.collectionName}
+//   router.delete("/${element.collectionName.uncapitalize()}/delete", ${element.collectionName.capitalize()}.deleteAll);
+
+// \n\n
+// ''';
+//     }
+//     return data;
+//   }
+
+  return '''
+ module.exports = app => {
+ ${importStatement()}
+ 
+  var router = require("express").Router();
+ ${appRoutes()}
+  app.use('/api', router);
+};
+
+''';
+}
+
+String createCollectionRoute(
+  Collection collection,
+  List<Field> attributes,
+) {
+  String importStatement() {
+    String data = '';
+    data += '''
+const ${collection.collectionName.capitalize()} = require("../controller/${collection.collectionName.uncapitalize()}_controller.js"); \n''';
     return data;
   }
 
   String routes() {
     String data = '';
-    for (var element in collection) {
-      data += '''
- // Create a new ${element.collectionName}
-  router.post("/${element.collectionName.uncapitalize()}/post", jsonParser ,${element.collectionName.capitalize()}.create);
 
-  // Retrieve all ${element.collectionName}
-  router.get("/${element.collectionName.uncapitalize()}/get", ${element.collectionName.capitalize()}.findAll);
+    data += '''
+ // Create a new ${collection.collectionName}
+  router.post("/${collection.collectionName.uncapitalize()}/post" ,${collection.collectionName.capitalize()}.create);
 
-  // Retrieve a single ${element.collectionName} with id
-  router.get("/${element.collectionName.uncapitalize()}/get/:id", ${element.collectionName.capitalize()}.findOne);
+  // Retrieve all ${collection.collectionName}
+  router.get("/${collection.collectionName.uncapitalize()}/get", ${collection.collectionName.capitalize()}.findAll);
 
-  // Update a ${element.collectionName} with id
-  router.put("/${element.collectionName.uncapitalize()}/update/:id", ${element.collectionName.capitalize()}.update);
+  // Retrieve a single ${collection.collectionName} with id
+  router.get("/${collection.collectionName.uncapitalize()}/get/:id", ${collection.collectionName.capitalize()}.findOne);
 
-  // Delete a ${element.collectionName} with id
-  router.delete("/${element.collectionName.uncapitalize()}/delete/:id", ${element.collectionName.capitalize()}.delete);
+  // Update a ${collection.collectionName} with id
+  router.put("/${collection.collectionName.uncapitalize()}/update/:id", ${collection.collectionName.capitalize()}.update);
 
-  // Delete all ${element.collectionName}
-  router.delete("/${element.collectionName.uncapitalize()}/delete", ${element.collectionName.capitalize()}.deleteAll);
+  // Delete a ${collection.collectionName} with id
+  router.delete("/${collection.collectionName.uncapitalize()}/delete/:id", ${collection.collectionName.capitalize()}.delete);
 
-\n\n
+  // Delete all ${collection.collectionName}
+  router.delete("/${collection.collectionName.uncapitalize()}/delete", ${collection.collectionName.capitalize()}.deleteAll);
+\n
 ''';
-    }
+
     return data;
   }
 
   return '''
-module.exports = app => {
- ${importStatement()}
-  // create application/json parser
-  var bodyParser = require("body-parser");
-  var jsonParser = bodyParser.json();
+${importStatement()}
+exports.${collection.collectionName.uncapitalize()}Routes = (router) => {
 
-  // create application/x-www-form-urlencoded parser
-  var urlencodedParser = bodyParser.urlencoded({ extended: false });
- 
-  var router = require("express").Router();
-  app.use(jsonParser);
- ${routes()}
-   app.use('/api', router);
-};
+${routes()}
 
+}
 ''';
 }

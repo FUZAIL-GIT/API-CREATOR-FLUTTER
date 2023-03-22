@@ -3,27 +3,13 @@ import 'package:node_server_maker/src/pages/home_page/controller.dart';
 import 'package:get/get.dart';
 import 'package:node_server_maker/src/pages/home_page/widgets.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends GetView<HomeController> {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    HomeController controller = Get.put(HomeController());
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add),
-      ),
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.surfaceTint,
-        title: Text(
-          "Node Api Maker",
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium!
-              .copyWith(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-      ),
+      appBar: AppBar(),
       body: Obx(
         () => Padding(
           padding: EdgeInsets.symmetric(

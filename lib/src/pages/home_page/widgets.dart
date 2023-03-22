@@ -114,7 +114,13 @@ Step collectionPrompt({
                     borderRadius: BorderRadius.circular(20)),
                 value: controller.isTimeStamp,
                 onChanged: controller.isTimeStampChange,
-                title: const Text("Timestamp"),
+                title: Text(
+                  "Timestamp",
+                  style: TextStyle(
+                    color: Colors.grey.shade800,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
             const SizedBox(
@@ -130,7 +136,13 @@ Step collectionPrompt({
                     borderRadius: BorderRadius.circular(20)),
                 value: controller.isPagination,
                 onChanged: controller.isPaginationChange,
-                title: const Text("Pagination"),
+                title: Text(
+                  "Pagination",
+                  style: TextStyle(
+                    color: Colors.grey.shade800,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
             const SizedBox(
@@ -273,6 +285,7 @@ Step collectionPrompt({
                                         },
                                         icon: Icon(
                                           Icons.add_circle_outline_rounded,
+                                          size: 30,
                                           color: Theme.of(context)
                                               .colorScheme
                                               .onSurface,
@@ -363,7 +376,7 @@ Step finishSection({
   required BuildContext context,
 }) {
   return Step(
-    title: Text('Finish'),
+    title: const Text('Finish'),
     content: Column(
       children: [
         CheckboxMenuButton(
@@ -482,15 +495,16 @@ Future<void> attributePrompt({
                                 Theme.of(context).colorScheme.secondary,
                             focusColor: Colors.transparent,
                             borderRadius: BorderRadius.circular(10),
-
-                            // icon: const SizedBox(),
                             underline: const SizedBox(),
                             value: controller.selectedDataType,
+                            style: const TextStyle(color: Colors.white),
                             onChanged: controller.onDropDownChange,
                             items: controller.dataTypes.map((e) {
                               return DropdownMenuItem<String>(
                                 value: e,
-                                child: Text(e),
+                                child: Text(
+                                  e,
+                                ),
                               );
                             }).toList(),
                           ),
@@ -509,7 +523,10 @@ Future<void> attributePrompt({
                               borderRadius: BorderRadius.circular(15)),
                           value: controller.isRequiredField,
                           onChanged: controller.isRequiredChange,
-                          title: const Text("Required"),
+                          title: Text(
+                            "Required",
+                            style: TextStyle(color: Colors.grey.shade900),
+                          ),
                         ),
                       ),
                       const SizedBox(
@@ -525,7 +542,10 @@ Future<void> attributePrompt({
                               borderRadius: BorderRadius.circular(15)),
                           value: controller.isUniqueField,
                           onChanged: controller.isUniqueChange,
-                          title: const Text("Unique"),
+                          title: Text(
+                            "Unique",
+                            style: TextStyle(color: Colors.grey.shade900),
+                          ),
                         ),
                       ),
                     ],

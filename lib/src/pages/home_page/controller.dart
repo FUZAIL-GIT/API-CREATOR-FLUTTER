@@ -2,11 +2,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:node_server_maker/src/common/enums/enums.dart';
+import 'package:node_server_maker/src/common/routes/routes.dart';
 import 'package:node_server_maker/src/common/services/network/internet_connectivity.dart';
 import 'package:node_server_maker/src/common/services/project_scaffolding_service/code_scaffolding/code_scaffolding_service.dart';
 import 'package:node_server_maker/src/pages/home_page/model.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-
 import '../../common/services/project_scaffolding_service/models/server_auth_model.dart';
 
 class HomeController extends GetxController {
@@ -106,6 +106,10 @@ class HomeController extends GetxController {
           isPagination: _isPagination.value,
         ),
       );
+      log('${listOfCollections.length}');
+      if (listOfCollections.length == 1) {
+        selectCollection(listOfCollections.first);
+      }
       collectionName.clear();
       _isTimeStamp.value = true;
       listOfCollections.refresh();
@@ -314,6 +318,7 @@ class HomeController extends GetxController {
 
     // handle logic for creating server project
     CodeScaffoldingService codeTemplateService = CodeScaffoldingService();
+    //call a timeout function to terminate the programe after some time
     codeTemplateService.createProject(
       projectName: projectName.text,
       collections: listOfCollections,
@@ -325,6 +330,7 @@ class HomeController extends GetxController {
       isInstallPackages: _automaticallyInstallPackages.value,
       isOpenInVsCode: _openInVsCode.value,
     );
+    log(_automaticallyInstallPackages.value.toString());
     Get.defaultDialog(
         barrierDismissible: false,
         title: '',
@@ -390,6 +396,7 @@ class HomeController extends GetxController {
                   onPressed: () {
                     Get.back();
                     stopwatch.reset();
+                    Get.offAndToNamed(AppRoutes.DASHBOARD);
                   },
                   child: const Text('Finish'),
                 ),
@@ -397,12 +404,6 @@ class HomeController extends GetxController {
             ],
           ),
         ));
-  }
-
-  void timeOutFunction({required Duration timeOutDuration}) {
-    Future.delayed(timeOutDuration, () {
-      throwError('Timeout');
-    });
   }
 
   void updateCurrentStatus(Status value) {

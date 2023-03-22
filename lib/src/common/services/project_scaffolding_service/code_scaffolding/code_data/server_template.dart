@@ -14,6 +14,9 @@ const yaml = require("yamljs");
 ${serverAuthentication.authenticationLevel != AuthenticationLevel.NONE ? 'const middleware = require("./app/middleware/middleware.js");' : ''}
 const mongoose = require("mongoose");
 const app = express();
+const bodyParser = require('body-parser')
+const jsonParser = bodyParser.json();
+app.use(jsonParser);
 const apiDocumentation = yaml.load('documentation.yaml');
 app.use('/api-docs' , swaggerUi.serve , swaggerUi.setup(apiDocumentation))
 ${serverAuthentication.authenticationLevel == AuthenticationLevel.BASIC ? 'app.use(middleware.basicAuthentication);' : serverAuthentication.authenticationLevel == AuthenticationLevel.TOKEN ? 'app.use(middleware.bearerAuthentication);' : ''}

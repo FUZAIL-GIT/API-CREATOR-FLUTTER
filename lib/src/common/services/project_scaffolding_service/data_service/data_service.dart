@@ -28,12 +28,17 @@ class DataService {
       createControllerTemplate(collection, attributes);
 
   //it will create the controller file code
-  String routesData(
+  String appRoutesData(
     List<Collection> collections,
     List<Field> attributes,
   ) =>
-      createRouteTemplate(collections, attributes);
-
+      createAppRouteTemplate(collections, attributes);
+  //it will create the controller file code
+  String collectionRoutesData(
+    Collection collection,
+    List<Field> attributes,
+  ) =>
+      createCollectionRoute(collection, attributes);
   //it will create the db config file code
   String mongoDbConfig(
       String mongoDbUrl, ServerAuthentication serverAuthentication) {

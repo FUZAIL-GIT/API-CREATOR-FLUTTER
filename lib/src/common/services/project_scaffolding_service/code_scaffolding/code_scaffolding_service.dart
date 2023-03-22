@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:node_server_maker/src/common/enums/enums.dart';
 import 'package:node_server_maker/src/common/extensions/extension.dart';
@@ -17,19 +19,25 @@ class CodeScaffoldingService extends GetxController {
   late final String workingDirectory;
   late final Directory? downloadDirectoryPath;
   DataService dataService = DataService();
-
   Future<bool> runCommand({
     required String workingDirectory,
     required String command,
     bool runInShell = true,
   }) async {
-    var result = await Process.run(command, [],
-        runInShell: runInShell, workingDirectory: workingDirectory);
-    if (result.exitCode != 0) {
-      return false;
-    } else {
-      return true;
+    try {
+      var result = await Process.run(command, [],
+              runInShell: runInShell, workingDirectory: workingDirectory)
+          .timeout(const Duration(seconds: 60));
+      if (result.exitCode != 0) {
+        return false;
+      } else {
+        return true;
+      }
+    } on TimeoutException {
+      // The operation timed out
+      homeController.throwError('Timeout');
     }
+    return false;
   }
 
   //create a porject
@@ -116,7 +124,59 @@ class CodeScaffoldingService extends GetxController {
                 }
               });
               homeController.updateCurrentStatus(Status.INSTALLED);
-            } else {}
+            } else {
+              log('npm packages not installed');
+              Get.showSnackbar(
+                const GetSnackBar(
+                  title: 'Internet may not avaiable',
+                  message: 'you need to install packages manually',
+                  leftBarIndicatorColor: Colors.redAccent,
+                  duration: Duration(seconds: 2),
+                ),
+              );
+              homeController.updateCurrentStatus(Status.INSTALLED);
+
+              await createFolderStructure(
+                attributes: attributes,
+                collections: collections,
+                mongoDbUrl: mongoDbUrl,
+                projectName: projectName,
+                serverAuthentication: serverAuthentication,
+                isTimestamp: isTimestamp,
+                isPagination: isPagination,
+                isOpenInVsCode: isOpenInVsCode,
+              ).then((value) {
+                if (value) {
+                  log("folder Structure created");
+                }
+              });
+            }
+          });
+        } else if (!isAutomaticallyInstallPackages) {
+          log('npm packages not installed');
+          Get.showSnackbar(
+            const GetSnackBar(
+              title: 'Internet may not avaiable',
+              message: 'you need to install packages manually',
+              leftBarIndicatorColor: Colors.redAccent,
+              duration: Duration(seconds: 2),
+            ),
+          );
+          homeController.updateCurrentStatus(Status.INSTALLED);
+
+          await createFolderStructure(
+            attributes: attributes,
+            collections: collections,
+            mongoDbUrl: mongoDbUrl,
+            projectName: projectName,
+            serverAuthentication: serverAuthentication,
+            isTimestamp: isTimestamp,
+            isPagination: isPagination,
+            isOpenInVsCode: isOpenInVsCode,
+          ).then((value) {
+            if (value) {
+              log("folder Structure created");
+            }
           });
         }
       } else {
@@ -165,13 +225,20 @@ class CodeScaffoldingService extends GetxController {
           "${controllerFolder.path}\\${collection.collectionName.uncapitalize()}_controller.js");
       controllerFile.writeAsStringSync(
           dataService.controllerData(collection, attributes));
+
+      // ############################################################################
+      //*route file
+      File collectionRouteFile = File(
+          '${projectDir.path}\\routes\\${collection.collectionName.uncapitalize()}_routes.js');
+      collectionRouteFile.writeAsStringSync(
+          dataService.collectionRoutesData(collection, attributes));
     }
 
     // ############################################################################
     //*route file
-    File routeFile = File('${projectDir.path}\\routes\\app_routes.js');
-    routeFile
-        .writeAsStringSync(dataService.routesData(collections, attributes));
+    File appRouteFile = File('${projectDir.path}\\routes\\app_routes.js');
+    appRouteFile
+        .writeAsStringSync(dataService.appRoutesData(collections, attributes));
 
     // ############################################################################
     // *server file
