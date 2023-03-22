@@ -5,7 +5,10 @@ import 'package:node_server_maker/src/common/routes/routes.dart';
 import 'src/common/routes/app_pages.dart';
 import 'src/common/style/theme.dart';
 
-void main() async => runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

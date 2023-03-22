@@ -1,6 +1,6 @@
 import 'package:node_server_maker/src/common/enums/enums.dart';
 
-import '../../models/server_auth_model.dart';
+import '../../../../models/server_auth_model.dart';
 
 String middlewareTemplate(
     {required ServerAuthentication serverAuthentication}) {

@@ -1,9 +1,10 @@
 import 'package:node_server_maker/src/common/extensions/extension.dart';
-import '../../../../../pages/home_page/model.dart';
+import '../../../../models/attribute_model.dart';
+import '../../../../models/collection_model.dart';
 
 String createControllerTemplate(
   Collection collection,
-  List<Field> attributes,
+  List<Attribute> attributes,
 ) {
   String modelName = collection.collectionName;
 

@@ -1,13 +1,14 @@
 import 'package:node_server_maker/src/common/enums/enums.dart';
 import 'package:node_server_maker/src/common/extensions/extension.dart';
-import 'package:node_server_maker/src/common/services/project_scaffolding_service/models/server_auth_model.dart';
+import 'package:node_server_maker/src/common/models/server_auth_model.dart';
 
-import '../../../../../pages/home_page/model.dart';
+import '../../../../models/attribute_model.dart';
+import '../../../../models/collection_model.dart';
 
 String swaggerDocumentation({
   required String projectName,
   required List<Collection> collection,
-  required List<Field> attributes,
+  required List<Attribute> attributes,
   required ServerAuthentication serverAuthentication,
 }) {
   String schemas() {

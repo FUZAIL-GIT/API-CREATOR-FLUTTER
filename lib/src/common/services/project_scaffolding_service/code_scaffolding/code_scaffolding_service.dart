@@ -6,9 +6,10 @@ import 'package:get/get.dart';
 import 'package:node_server_maker/src/common/enums/enums.dart';
 import 'package:node_server_maker/src/common/extensions/extension.dart';
 import 'package:node_server_maker/src/pages/home_page/controller.dart';
-import '../../../../pages/home_page/model.dart';
+import '../../../models/attribute_model.dart';
+import '../../../models/collection_model.dart';
 import '../data_service/data_service.dart';
-import '../models/server_auth_model.dart';
+import '../../../models/server_auth_model.dart';
 import 'code_data/middleware_template.dart';
 import 'code_data/server_template.dart';
 import 'code_data/swagger_documentation.dart';
@@ -44,7 +45,7 @@ class CodeScaffoldingService extends GetxController {
   Future<void> createProject({
     required String projectName,
     required List<Collection> collections,
-    required List<Field> attributes,
+    required List<Attribute> attributes,
     required String mongoDbUrl,
     required bool isTimestamp,
     required bool isPagination,
@@ -81,7 +82,7 @@ class CodeScaffoldingService extends GetxController {
   Future<void> projectSetup(
       {required String projectName,
       required List<Collection> collections,
-      required List<Field> attributes,
+      required List<Attribute> attributes,
       required String mongoDbUrl,
       required bool isTimestamp,
       required bool isPagination,
@@ -189,7 +190,7 @@ class CodeScaffoldingService extends GetxController {
     required String projectName,
     required String mongoDbUrl,
     required List<Collection> collections,
-    required List<Field> attributes,
+    required List<Attribute> attributes,
     required bool isTimestamp,
     required bool isPagination,
     required bool isOpenInVsCode,

@@ -1,10 +1,11 @@
 import 'package:node_server_maker/src/common/extensions/extension.dart';
 
-import '../../../../../pages/home_page/model.dart';
+import '../../../../models/attribute_model.dart';
+import '../../../../models/collection_model.dart';
 
 String createAppRouteTemplate(
   List<Collection> collection,
-  List<Field> attributes,
+  List<Attribute> attributes,
 ) {
   String importStatement() {
     String data = '';
@@ -64,7 +65,7 @@ String createAppRouteTemplate(
 
 String createCollectionRoute(
   Collection collection,
-  List<Field> attributes,
+  List<Attribute> attributes,
 ) {
   String importStatement() {
     String data = '';

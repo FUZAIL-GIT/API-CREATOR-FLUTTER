@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:node_server_maker/src/common/enums/enums.dart';
 
-import '../../models/server_auth_model.dart';
+import '../../../../models/server_auth_model.dart';
 
 String serverTemplate({required ServerAuthentication serverAuthentication}) {
   log(serverAuthentication.authenticationLevel.toString());

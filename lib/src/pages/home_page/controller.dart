@@ -5,9 +5,10 @@ import 'package:node_server_maker/src/common/enums/enums.dart';
 import 'package:node_server_maker/src/common/routes/routes.dart';
 import 'package:node_server_maker/src/common/services/network/internet_connectivity.dart';
 import 'package:node_server_maker/src/common/services/project_scaffolding_service/code_scaffolding/code_scaffolding_service.dart';
-import 'package:node_server_maker/src/pages/home_page/model.dart';
+import 'package:node_server_maker/src/common/models/collection_model.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import '../../common/services/project_scaffolding_service/models/server_auth_model.dart';
+import '../../common/models/attribute_model.dart';
+import '../../common/models/server_auth_model.dart';
 
 class HomeController extends GetxController {
   // STEP 1: Stepper
@@ -128,7 +129,7 @@ class HomeController extends GetxController {
   }
 
   // STEP 3: Attributes
-  RxList<Field> listOfAttributes = <Field>[].obs;
+  RxList<Attribute> listOfAttributes = <Attribute>[].obs;
   final RxBool _isUniqueField = false.obs;
   bool get isUniqueField => _isUniqueField.value;
   final RxBool _isRequiredField = true.obs;
@@ -166,7 +167,7 @@ class HomeController extends GetxController {
       }
       if (!isAlreadyExist) {
         listOfAttributes.add(
-          Field(
+          Attribute(
             fieldName: fieldName.text,
             fieldDataType: _selectedDataType.value,
             isRequired: _isRequiredField.value,
@@ -193,7 +194,7 @@ class HomeController extends GetxController {
       listOfAttributes.removeAt(index);
       listOfAttributes.insert(
         index,
-        Field(
+        Attribute(
           fieldName: fieldName.text,
           fieldDataType: _selectedDataType.value,
           isRequired: _isRequiredField.value,
@@ -221,7 +222,7 @@ class HomeController extends GetxController {
     _selectedDataType.value = value!;
   }
 
-  void assignInitialValue(Field field) {
+  void assignInitialValue(Attribute field) {
     fieldName.text = field.fieldName;
     _isRequiredField.value = field.isRequired;
     _isUniqueField.value = field.isUnique;
@@ -302,18 +303,15 @@ class HomeController extends GetxController {
     late ServerAuthentication serverAuthentication;
     if (authenticationLevel == AuthenticationLevel.BASIC) {
       serverAuthentication = ServerAuthentication.basic(
-        authenticationLevel: authenticationLevel,
         userName: userName.text,
         password: password.text,
       );
     } else if (authenticationLevel == AuthenticationLevel.TOKEN) {
       serverAuthentication = ServerAuthentication.token(
-        authenticationLevel: authenticationLevel,
         token: authorizationToken.text,
       );
     } else if (authenticationLevel == AuthenticationLevel.NONE) {
-      serverAuthentication =
-          ServerAuthentication.none(authenticationLevel: authenticationLevel);
+      serverAuthentication = ServerAuthentication.none();
     }
 
     // handle logic for creating server project

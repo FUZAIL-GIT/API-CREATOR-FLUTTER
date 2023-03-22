@@ -3,11 +3,12 @@ import 'dart:io';
 import 'package:node_server_maker/src/common/enums/enums.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../../../../pages/home_page/model.dart';
+import '../../../models/attribute_model.dart';
+import '../../../models/collection_model.dart';
 import '../code_scaffolding/code_data/controller_template.dart';
 import '../code_scaffolding/code_data/modal_code_template.dart';
 import '../code_scaffolding/code_data/route_template.dart';
-import '../models/server_auth_model.dart';
+import '../../../models/server_auth_model.dart';
 
 class DataService {
   //get download directory
@@ -16,27 +17,27 @@ class DataService {
   //it will create the model file code
   String modelData(
     Collection collection,
-    List<Field> attributes,
+    List<Attribute> attributes,
   ) =>
       modelTemplate(collection, attributes);
 
   //it will create the controller file code
   String controllerData(
     Collection collection,
-    List<Field> attributes,
+    List<Attribute> attributes,
   ) =>
       createControllerTemplate(collection, attributes);
 
   //it will create the controller file code
   String appRoutesData(
     List<Collection> collections,
-    List<Field> attributes,
+    List<Attribute> attributes,
   ) =>
       createAppRouteTemplate(collections, attributes);
   //it will create the controller file code
   String collectionRoutesData(
     Collection collection,
-    List<Field> attributes,
+    List<Attribute> attributes,
   ) =>
       createCollectionRoute(collection, attributes);
   //it will create the db config file code

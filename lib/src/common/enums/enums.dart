@@ -14,3 +14,12 @@ enum Status {
   COMPLETED,
   FAIL,
 }
+
+enum DataType {
+  Boolean,
+  Number,
+  String,
+  Array,
+  Map,
+  Date,
+}

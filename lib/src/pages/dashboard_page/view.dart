@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:node_server_maker/src/common/routes/routes.dart';
+import 'package:node_server_maker/src/pages/dashboard_page/controller.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Get.put(DashboardController());
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
