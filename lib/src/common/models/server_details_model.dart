@@ -1,23 +1,31 @@
-import 'package:hive/hive.dart';
 import 'package:node_server_maker/src/common/models/server_auth_model.dart';
 import 'package:node_server_maker/src/common/models/collection_model.dart';
 import 'attribute_model.dart';
-part 'server_details_model.g.dart';
 
-@HiveType(typeId: 4)
-class ServertDetails extends HiveObject {
-  @HiveField(0)
+class ServerDetails {
   List<Collection> collections;
-  @HiveField(1)
   List<Attribute> attributes;
-  @HiveField(2)
   String mongoDbUrl;
-  @HiveField(3)
   ServerAuthentication serverAuthentication;
-  ServertDetails({
+  ServerDetails({
     required this.attributes,
     required this.collections,
     required this.mongoDbUrl,
     required this.serverAuthentication,
   });
+  factory ServerDetails.fromJson(Map<String, dynamic> json) => ServerDetails(
+        attributes: List<Attribute>.from(
+            json["attributes"].map((x) => Attribute.fromJson(x))),
+        collections: List<Collection>.from(
+            json["collections"].map((x) => Collection.fromJson(x))),
+        mongoDbUrl: json["mongoDbUrl"],
+        serverAuthentication:
+            ServerAuthentication.fromJson(json["serverAuthentication"]),
+      );
+  Map<String, dynamic> toJson() => {
+        "attributes": List.from(attributes.map((x) => x.toJson())),
+        "collections": List.from(collections.map((x) => x.toJson())),
+        "mongoDbUrl": mongoDbUrl,
+        "serverAuthentication": serverAuthentication.toJson(),
+      };
 }

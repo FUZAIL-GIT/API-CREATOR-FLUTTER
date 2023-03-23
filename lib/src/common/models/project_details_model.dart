@@ -1,21 +1,41 @@
 import 'package:node_server_maker/src/common/models/server_details_model.dart';
-import 'package:hive/hive.dart';
-part 'project_details_model.g.dart';
 
-@HiveType(typeId: 2)
-class ProjectDetails extends HiveObject {
-  @HiveField(0)
+class ProjectDetails {
+  int?  id;
   String projectName;
-  @HiveField(1)
-  DateTime ceratedAt;
-  @HiveField(2)
+  DateTime createdAt;
   List<DateTime> updatedAt;
-  @HiveField(3)
-  ServertDetails servertDetails;
+  ServerDetails servertDetails;
   ProjectDetails({
-    required this.ceratedAt,
+    this.id,
+    required this.createdAt,
     required this.updatedAt,
     required this.projectName,
     required this.servertDetails,
   });
+//   @override
+//   toString() {
+//     return '''
+// | createdAt : $createdAt
+// | updatedAt : $updatedAt
+// | projectName : $projectName
+// | servertDetails : $servertDetails
+// ''';
+//   }
+
+  factory ProjectDetails.fromJson(Map<String, dynamic> json) => ProjectDetails(
+        id: json['id'],
+        createdAt: DateTime.parse(json['createdAt']),
+        updatedAt: List<DateTime>.from(
+            json["updatedAt"].map((x) => DateTime.parse(x))),
+        projectName: json["projectName"],
+        servertDetails: ServerDetails.fromJson(json["servertDetails"]),
+      );
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "createdAt": createdAt.toString(),
+        "updatedAt": List<dynamic>.from(updatedAt.map((x) => x.toString())),
+        "projectName": projectName,
+        "servertDetails": servertDetails.toJson(),
+      };
 }

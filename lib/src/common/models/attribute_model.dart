@@ -1,18 +1,10 @@
-import 'package:hive/hive.dart';
 import 'collection_model.dart';
-part 'attribute_model.g.dart';
 
-@HiveType(typeId: 0)
-class Attribute extends HiveObject {
-  @HiveField(0)
+class Attribute {
   final String fieldName;
-  @HiveField(1)
   final String fieldDataType;
-  @HiveField(2)
   final Collection collection;
-  @HiveField(3)
   final bool isRequired;
-  @HiveField(4)
   final bool isUnique;
 
   Attribute({
@@ -22,4 +14,18 @@ class Attribute extends HiveObject {
     this.isRequired = true,
     this.isUnique = false,
   });
+  factory Attribute.fromJson(Map<String, dynamic> json) => Attribute(
+        fieldName: json["fieldName"],
+        fieldDataType: json["fieldDataType"],
+        collection: Collection.fromJson(json["collection"]),
+        isRequired: json["isRequired"],
+        isUnique: json["isUnique"],
+      );
+  Map<String, dynamic> toJson() => {
+        "fieldName": fieldName,
+        "fieldDataType": fieldDataType,
+        "collection": collection.toJson(),
+        "isRequired": isRequired,
+        "isUnique": isUnique,
+      };
 }

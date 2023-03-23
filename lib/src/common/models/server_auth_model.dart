@@ -1,17 +1,10 @@
-import 'package:hive/hive.dart';
 import 'package:node_server_maker/src/common/enums/enums.dart';
-part 'server_auth_model.g.dart';
 
-@HiveType(typeId: 3)
-class ServerAuthentication extends HiveObject {
-  @HiveField(0)
+class ServerAuthentication {
   String? userName;
-  @HiveField(1)
   String? password;
-  @HiveField(2)
   String? token;
-  @HiveField(3)
-  AuthenticationLevel? authenticationLevel;
+  late String authenticationLevel;
   ServerAuthentication(
       {required this.authenticationLevel,
       required this.password,
@@ -24,13 +17,13 @@ class ServerAuthentication extends HiveObject {
             userName: userName,
             password: password,
             token: null,
-            authenticationLevel: AuthenticationLevel.BASIC);
+            authenticationLevel: AuthenticationLevel.BASIC.name);
   ServerAuthentication.none()
       : this(
           userName: null,
           password: null,
           token: null,
-          authenticationLevel: AuthenticationLevel.NONE,
+          authenticationLevel: AuthenticationLevel.NONE.name,
         );
   ServerAuthentication.token({
     required String token,
@@ -38,5 +31,18 @@ class ServerAuthentication extends HiveObject {
             userName: null,
             password: null,
             token: token,
-            authenticationLevel: AuthenticationLevel.TOKEN);
+            authenticationLevel: AuthenticationLevel.TOKEN.name);
+  factory ServerAuthentication.fromJson(Map<String, dynamic> json) =>
+      ServerAuthentication(
+        userName: json["userName"],
+        password: json["password"],
+        token: json["token"],
+        authenticationLevel: json["authenticationLevel"].toString(),
+      );
+  Map<String, dynamic> toJson() => {
+        "userName": userName,
+        "password": password,
+        "token": token,
+        "authenticationLevel": authenticationLevel.toString(),
+      };
 }

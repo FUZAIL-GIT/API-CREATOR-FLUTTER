@@ -1,7 +1,10 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:node_server_maker/src/common/database/local_database/local_db.dart';
 import 'package:node_server_maker/src/common/enums/enums.dart';
+import 'package:node_server_maker/src/common/models/project_details_model.dart';
+import 'package:node_server_maker/src/common/models/server_details_model.dart';
 import 'package:node_server_maker/src/common/routes/routes.dart';
 import 'package:node_server_maker/src/common/services/network/internet_connectivity.dart';
 import 'package:node_server_maker/src/common/services/project_scaffolding_service/code_scaffolding/code_scaffolding_service.dart';
@@ -393,6 +396,22 @@ class HomeController extends GetxController {
                 child: ElevatedButton(
                   onPressed: () {
                     Get.back();
+                    if (_currentStatus.value != Status.FAIL) {
+                      ProjectDetails projectDetails = ProjectDetails(
+                        createdAt: DateTime.now(),
+                        updatedAt: [],
+                        projectName: projectName.text,
+                        servertDetails: ServerDetails(
+                          attributes: listOfAttributes,
+                          collections: listOfCollections,
+                          mongoDbUrl: mongoDbUrl.text,
+                          serverAuthentication: serverAuthentication,
+                        ),
+                      );
+                      // save the data to local storage
+                      LocalDatabase.writeDocument(
+                          data: projectDetails, collectionName: 'projectInfo');
+                    }
                     stopwatch.reset();
                     Get.offAndToNamed(AppRoutes.DASHBOARD);
                   },
