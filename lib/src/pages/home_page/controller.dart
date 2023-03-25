@@ -165,7 +165,6 @@ class HomeController extends GetxController {
 
   void addFieldToCollection() {
     // handle logic for adding field to collection
-    _isEdit.value = true;
     bool isAlreadyExist = false;
     if (fieldNameKey.currentState!.validate()) {
       for (var element in listOfAttributes) {

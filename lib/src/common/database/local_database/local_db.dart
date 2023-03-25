@@ -38,7 +38,7 @@ class LocalDatabase {
         List<dynamic> fileData = jsonDecode(previousData);
 
         // Add the new document to the array and give it an ID
-        data["id"] = fileData.length;
+        data.id = fileData.length;
         fileData.add(data);
 
         // Write the updated array back to the file in JSON format
@@ -48,7 +48,7 @@ class LocalDatabase {
         log('The object should contain an id parameter', name: 'LocalDatabase');
       } catch (e) {
         // If an unknown error occurs, log the exception
-        log(e.toString(), name: 'LocalDatabase');
+        log('', error: e.toString(), name: 'LocalDatabase');
       }
     } else {
       // If the file does not exist, log an error
@@ -69,7 +69,7 @@ class LocalDatabase {
         return jsonDecode(fileData);
       } catch (e) {
         // If an error occurs, log the exception
-        log(e.toString(), name: 'LocalDatabase');
+        log('', error: e.toString(), name: 'LocalDatabase');
       }
     } else {
       // If the file does not exist, log an error
@@ -92,11 +92,11 @@ class LocalDatabase {
 
         // Remove the specified document from the array and write the updated
         // array back to the file in JSON format
-        fileData.removeWhere((element) => element["id"] == id);
+        fileData.removeWhere((element) => element.id == id);
         collection.writeAsStringSync(jsonEncode(fileData));
       } catch (e) {
         // If an error occurs, log the exception
-        log(e.toString(), name: 'LocalDatabase');
+        log('', error: e.toString(), name: 'LocalDatabase');
       }
     } else {
       // If the file does not exist, log an error
@@ -123,12 +123,12 @@ class LocalDatabase {
         // and re-insert it into the array, then write the updated array back
         // to the file in JSON format
         fileData.removeWhere((element) => element["id"] == id);
-        data["id"] = id;
+        data.id = id;
         fileData.insert(id, data);
         collection.writeAsStringSync(jsonEncode(fileData));
       } catch (e) {
         // If an error occurs, log the exception
-        log(e.toString(), name: 'LocalDatabase');
+        log('', error: e.toString(), name: 'LocalDatabase');
       }
     } else {
       // If the file does not exist, log an error
@@ -149,7 +149,7 @@ class LocalDatabase {
         log('$collectionName deleted successfully', name: 'LocalDatabase');
       } catch (e) {
         // If an error occurs, log the exception
-        log(e.toString(), name: 'LocalDatabase');
+        log('', error: e.toString(), name: 'LocalDatabase');
       }
     } else {
       // If the file does not exist, log an error
