@@ -1,8 +1,7 @@
 import 'dart:developer';
-
 import 'package:get/get.dart';
-import 'package:node_server_maker/src/common/database/local_database/local_db.dart';
 import 'package:node_server_maker/src/common/models/project_details_model.dart';
+import '../../common/database/local_database/local_db.dart';
 
 class DashboardController extends GetxController
     with StateMixin<List<ProjectDetails>> {

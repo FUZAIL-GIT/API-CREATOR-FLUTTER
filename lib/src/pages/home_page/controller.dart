@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:node_server_maker/src/common/database/local_database/local_db.dart';
 import 'package:node_server_maker/src/common/enums/enums.dart';
 import 'package:node_server_maker/src/common/models/project_details_model.dart';
 import 'package:node_server_maker/src/common/models/server_details_model.dart';
@@ -11,6 +9,7 @@ import 'package:node_server_maker/src/common/services/network/internet_connectiv
 import 'package:node_server_maker/src/common/services/project_scaffolding_service/code_scaffolding/code_scaffolding_service.dart';
 import 'package:node_server_maker/src/common/models/collection_model.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import '../../common/database/local_database/local_db.dart';
 import '../../common/models/attribute_model.dart';
 import '../../common/models/server_auth_model.dart';
 
@@ -484,10 +483,8 @@ class HomeController extends GetxController {
     progressIndicatorPercentage.value = 1.0;
   }
 
-// for testing purpose
   @override
   void onInit() async {
-    mongoDbUrl.text = "mongodb://localhost:27017";
     _automaticallyInstallPackages.value =
         await InternetConnectivity().isInternetAvailable();
     super.onInit();
