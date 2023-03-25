@@ -41,6 +41,7 @@ dependencies:
   percent_indicator: ^4.2.3
   connectivity_plus: ^3.0.3
   intl: ^0.17.0
+  rename: ^2.1.1
 
 
 

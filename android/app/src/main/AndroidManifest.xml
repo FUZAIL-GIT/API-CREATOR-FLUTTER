@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.node_server_maker">
    <application
-        android:label="node_server_maker"
+        android:label="API-Genius"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
