@@ -11,7 +11,7 @@ const express = require("express");
 const config = require("./app/config/config.js");
 const swaggerUi = require('swagger-ui-express');
 const yaml = require("yamljs");
-${serverAuthentication.authenticationLevel != AuthenticationLevel.NONE ? 'const middleware = require("./app/middleware/middleware.js");' : ''}
+${serverAuthentication.authenticationLevel != AuthenticationLevel.NONE.name ? 'const middleware = require("./app/middleware/middleware.js");' : ''}
 const mongoose = require("mongoose");
 const app = express();
 const bodyParser = require('body-parser')
@@ -19,7 +19,7 @@ const jsonParser = bodyParser.json();
 app.use(jsonParser);
 const apiDocumentation = yaml.load('documentation.yaml');
 app.use('/api-docs' , swaggerUi.serve , swaggerUi.setup(apiDocumentation))
-${serverAuthentication.authenticationLevel == AuthenticationLevel.BASIC ? 'app.use(middleware.basicAuthentication);' : serverAuthentication.authenticationLevel == AuthenticationLevel.TOKEN ? 'app.use(middleware.bearerAuthentication);' : ''}
+${serverAuthentication.authenticationLevel == AuthenticationLevel.BASIC.name ? 'app.use(middleware.basicAuthentication);' : serverAuthentication.authenticationLevel == AuthenticationLevel.TOKEN.name ? 'app.use(middleware.bearerAuthentication);' : ''}
 require("./app/routes/app_routes")(app);
 
 console.log("Api Documentation Available at : http://localhost:8080/api-docs")

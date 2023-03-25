@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:node_server_maker/src/common/models/project_details_model.dart';
+import 'package:node_server_maker/src/common/routes/routes.dart';
 import 'package:node_server_maker/src/pages/home_page/controller.dart';
 import 'package:get/get.dart';
 import 'package:node_server_maker/src/pages/home_page/widgets.dart';
@@ -8,8 +10,19 @@ class HomeScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    ProjectDetails? projectDetails = Get.arguments;
+    if (projectDetails != null) {
+      controller.updateProject(projectDetails);
+    }
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+            onPressed: () {
+              Get.offAndToNamed(AppRoutes.DASHBOARD);
+            },
+            icon: const Icon(Icons.arrow_back_ios_new)),
+      ),
       body: Obx(
         () => Padding(
           padding: EdgeInsets.symmetric(
@@ -54,27 +67,34 @@ class HomeScreen extends GetView<HomeController> {
       {required BuildContext context,
       required ControlsDetails details,
       required HomeController homeController}) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Row(
-        children: <Widget>[
-          if (homeController.currentStep > 0)
-            ElevatedButton(
-              onPressed: details.onStepCancel,
-              child: const Text('Back'),
-            ),
-          const SizedBox(width: 10),
-          if (homeController.currentStep <= 2)
-            ElevatedButton(
-              onPressed: details.onStepContinue,
-              child: const Text('Next'),
-            ),
-          if (homeController.currentStep == 3)
-            ElevatedButton(
-              onPressed: details.onStepContinue,
-              child: const Text('Create'),
-            ),
-        ],
+    return Obx(
+      () => Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: Row(
+          children: <Widget>[
+            if (homeController.currentStep > 0)
+              ElevatedButton(
+                onPressed: details.onStepCancel,
+                child: const Text('Back'),
+              ),
+            const SizedBox(width: 10),
+            if (homeController.currentStep <= 2)
+              ElevatedButton(
+                onPressed: details.onStepContinue,
+                child: const Text('Next'),
+              ),
+            if (homeController.currentStep == 3)
+              homeController.isEdit
+                  ? ElevatedButton(
+                      onPressed: details.onStepContinue,
+                      child: const Text('Update'),
+                    )
+                  : ElevatedButton(
+                      onPressed: details.onStepContinue,
+                      child: const Text('Create'),
+                    ),
+          ],
+        ),
       ),
     );
   }

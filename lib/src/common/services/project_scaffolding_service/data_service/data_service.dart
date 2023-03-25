@@ -44,12 +44,13 @@ class DataService {
   String mongoDbConfig(
       String mongoDbUrl, ServerAuthentication serverAuthentication) {
     String authCredentials = serverAuthentication.authenticationLevel ==
-            AuthenticationLevel.BASIC
+            AuthenticationLevel.BASIC.name
         ? '''
  userName: "${serverAuthentication.userName}",
   password: "${serverAuthentication.password}"
 '''
-        : serverAuthentication.authenticationLevel == AuthenticationLevel.TOKEN
+        : serverAuthentication.authenticationLevel ==
+                AuthenticationLevel.TOKEN.name
             ? '''
 token: "${serverAuthentication.token}"
 '''

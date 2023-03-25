@@ -1,84 +1,178 @@
+// Import necessary packages and dependencies
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:node_server_maker/src/common/database/local_database/local_db.dart';
+import 'package:intl/intl.dart';
 import 'package:node_server_maker/src/common/models/project_details_model.dart';
 import 'package:node_server_maker/src/common/routes/routes.dart';
 import 'package:node_server_maker/src/pages/dashboard_page/controller.dart';
 
+// Define class DashboardScreen which extends GetView with Generic type DashboardController
 class DashboardScreen extends GetView<DashboardController> {
+  // Constructor for DashboardScreen
   const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Obtain width and height of screen
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
+    // Return a Scaffold widget with a controller observer,
+    // containing a Stack widget which has a Container and a GridView builder as children
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.offAllNamed(AppRoutes.HOME);
-        },
-        child: const Icon(Icons.add),
-      ),
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.surfaceTint,
-        title: Text(
-          "Node Api Maker",
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium!
-              .copyWith(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-      ),
       body: controller.obx(
         (state) {
-          return GridView.builder(
-            itemCount: state?.length,
-            shrinkWrap: true,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4),
-            itemBuilder: (context, index) {
-              ProjectDetails projectDetails = state![index];
-              return GestureDetector(
-                onDoubleTap: () {
-                  LocalDatabase.deleteDocument(
-                      collectionName: 'projectInfo', id: projectDetails.id!);
-                },
-                child: Container(
-                  margin: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(15),
+          return Stack(
+            children: [
+              Container(
+                height: height * 0.35,
+                width: double.infinity,
+                alignment: Alignment.topCenter,
+                // color: Theme.of(context).colorScheme.surfaceTint,
+                color: Colors.grey.shade800,
+                padding: width > 800.0 && width < 1200
+                    ? EdgeInsets.only(left: 160, right: 150, top: height * 0.08)
+                    : width > 1200.0 && width < 1600.0
+                        ? EdgeInsets.only(
+                            left: 260, right: 250, top: height * 0.08)
+                        : width > 1600
+                            ? EdgeInsets.only(
+                                left: 360, right: 350, top: height * 0.08)
+                            : EdgeInsets.only(
+                                left: 60, right: 50, top: height * 0.08),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'Your projects',
+                    style: TextStyle(
+                      fontSize: width > 800.0 && width < 1200
+                          ? 30
+                          : width > 1200.0
+                              ? 30
+                              : 25,
+                      fontFamily: 'EncodeSansSC_Condensed',
+                    ),
                   ),
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      RichText(
-                        textAlign: TextAlign.left,
-                        text: TextSpan(
-                          text: 'Project Name : ',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.surfaceTint,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                ),
+              ),
+              Padding(
+                padding: width > 800.0 && width < 1200
+                    ? EdgeInsets.only(left: 150, right: 150, top: height * 0.16)
+                    : width > 1200.0 && width < 1600.0
+                        ? EdgeInsets.only(
+                            left: 250, right: 250, top: height * 0.16)
+                        : width > 1600
+                            ? EdgeInsets.only(
+                                left: 350, right: 350, top: height * 0.16)
+                            : EdgeInsets.only(
+                                left: 50, right: 50, top: height * 0.16),
+                child: GridView.builder(
+                  itemCount: state!.length + 1,
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4, crossAxisSpacing: 5.0),
+                  itemBuilder: (context, index) {
+                    log('$index');
+
+                    // If index is zero, return gesture detector containing container and text
+                    // to add a new project
+                    if (index == 0) {
+                      return GestureDetector(
+                        onTap: () {
+                          Get.offAllNamed(AppRoutes.HOME);
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade900,
+                            borderRadius: BorderRadius.circular(15),
                           ),
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.add,
+                                size: 50,
+                                color:
+                                    Theme.of(context).colorScheme.surfaceTint,
+                              ),
+                              Text(
+                                'Add project',
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.surfaceTint,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+
+                    // If index is greater than zero, return container containing details of project
+                    else if (index > 0) {
+                      ProjectDetails projectDetails = state[index - 1];
+                      return Container(
+                        margin: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          // color: Colors.grey.shade900,
+                          color: Theme.of(context).colorScheme.surfaceTint,
+
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: const EdgeInsets.all(30),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextSpan(
-                              text: projectDetails.projectName,
-                              style: TextStyle(color: Colors.white),
+                            Text(
+                              projectDetails.projectName,
+                              style: TextStyle(
+                                fontSize: 30,
+                                color: Colors.grey.shade800,
+                                fontFamily: 'Orbitron',
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              DateFormat.yMMMMEEEEd()
+                                  .format(projectDetails.createdAt),
+                              style: TextStyle(
+                                color: Colors.grey.shade800,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'EncodeSansSC_Condensed',
+                              ),
+                            ),
+                            const Spacer(),
+                            IconButton(
+                              onPressed: () {
+                                Get.offAllNamed(AppRoutes.HOME,
+                                    arguments: projectDetails);
+                              },
+                              icon: Icon(
+                                Icons.edit,
+                                size: 30,
+                                color: Colors.grey.shade800,
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
+                      );
+                    }
+
+                    // Otherwise return null
+                    return null;
+                  },
                 ),
-              );
-            },
+              ),
+            ],
           );
         },
         onLoading: const LinearProgressIndicator(),
-        onEmpty: const Center(
-          child: Text('No Project Created yet'),
-        ),
         onError: (error) {
           return Center(
             child: Text(error ?? ''),

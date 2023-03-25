@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,6 +26,9 @@ class HomeController extends GetxController {
     // handle logic for moving to next step
     if (_currentStep.value == 0 && projectNameKey.currentState!.validate()) {
       _currentStep.value++;
+      if (listOfCollections.isNotEmpty) {
+        _selectedCollection.value = listOfCollections.first;
+      }
     } else if (_currentStep.value == 1 && listOfCollections.isNotEmpty) {
       //###############################################
       // this algorithm verifies that all the collection have at least one document
@@ -33,7 +37,8 @@ class HomeController extends GetxController {
         int index = 0;
         Collection currentCollection = collection;
         for (var attribute in listOfAttributes) {
-          if (currentCollection == attribute.collection) {
+          if (currentCollection.collectionName ==
+              attribute.collection.collectionName) {
             index++;
           }
         }
@@ -110,7 +115,6 @@ class HomeController extends GetxController {
           isPagination: _isPagination.value,
         ),
       );
-      log('${listOfCollections.length}');
       if (listOfCollections.length == 1) {
         selectCollection(listOfCollections.first);
       }
@@ -149,6 +153,8 @@ class HomeController extends GetxController {
       Collection(collectionName: '', isTimeStamp: true, isPagination: true).obs;
   Collection get selectedCollection => _selectedCollection.value;
   final RxString _selectedDataType = 'String'.obs;
+  final RxBool _isEdit = false.obs;
+  bool get isEdit => _isEdit.value;
   String get selectedDataType => _selectedDataType.value;
   TextEditingController fieldName = TextEditingController();
   GlobalKey<FormState> fieldNameKey = GlobalKey<FormState>();
@@ -159,6 +165,7 @@ class HomeController extends GetxController {
 
   void addFieldToCollection() {
     // handle logic for adding field to collection
+    _isEdit.value = true;
     bool isAlreadyExist = false;
     if (fieldNameKey.currentState!.validate()) {
       for (var element in listOfAttributes) {
@@ -288,6 +295,7 @@ class HomeController extends GetxController {
   GlobalKey<FormState> passwordKey = GlobalKey<FormState>();
   TextEditingController projectName = TextEditingController();
   GlobalKey<FormState> projectNameKey = GlobalKey<FormState>();
+  int id = 0;
   RxString errorMessage = ''.obs;
   Stopwatch stopwatch = Stopwatch();
   final RxBool _automaticallyInstallPackages = true.obs;
@@ -328,10 +336,10 @@ class HomeController extends GetxController {
       serverAuthentication: serverAuthentication,
       isPagination: false,
       isTimestamp: false,
+      isEdit: _isEdit.value,
       isInstallPackages: _automaticallyInstallPackages.value,
       isOpenInVsCode: _openInVsCode.value,
     );
-    log(_automaticallyInstallPackages.value.toString());
     Get.defaultDialog(
         barrierDismissible: false,
         title: '',
@@ -395,7 +403,6 @@ class HomeController extends GetxController {
                 visible: progressIndicatorPercentage.value == 1.0,
                 child: ElevatedButton(
                   onPressed: () {
-                    Get.back();
                     if (_currentStatus.value != Status.FAIL) {
                       ProjectDetails projectDetails = ProjectDetails(
                         createdAt: DateTime.now(),
@@ -408,9 +415,16 @@ class HomeController extends GetxController {
                           serverAuthentication: serverAuthentication,
                         ),
                       );
-                      // save the data to local storage
-                      LocalDatabase.writeDocument(
-                          data: projectDetails, collectionName: 'projectInfo');
+                      if (!_isEdit.value) {
+                        LocalDatabase.writeDocument(
+                            data: projectDetails,
+                            collectionName: 'projectInfo');
+                      } else {
+                        LocalDatabase.updateDocument(
+                            collectionName: 'projectInfo',
+                            id: id,
+                            data: projectDetails);
+                      }
                     }
                     stopwatch.reset();
                     Get.offAndToNamed(AppRoutes.DASHBOARD);
@@ -421,6 +435,32 @@ class HomeController extends GetxController {
             ],
           ),
         ));
+  }
+
+  void updateProject(ProjectDetails projectDetails) {
+    // handle logic for assigning value in case of update the project
+    _isEdit.value = true;
+    id = projectDetails.id!;
+    _currentStep.value = 0;
+    projectName.text = projectDetails.projectName;
+    listOfCollections.value = projectDetails.servertDetails.collections;
+    listOfAttributes.value = projectDetails.servertDetails.attributes;
+    mongoDbUrl.text = projectDetails.servertDetails.mongoDbUrl;
+    _authenticationLevel.value = projectDetails
+                .servertDetails.serverAuthentication.authenticationLevel ==
+            'NONE'
+        ? AuthenticationLevel.NONE
+        : projectDetails
+                    .servertDetails.serverAuthentication.authenticationLevel ==
+                'BASIC'
+            ? AuthenticationLevel.BASIC
+            : AuthenticationLevel.TOKEN;
+    userName.text =
+        projectDetails.servertDetails.serverAuthentication.userName ?? '';
+    password.text =
+        projectDetails.servertDetails.serverAuthentication.password ?? '';
+    authorizationToken.text =
+        projectDetails.servertDetails.serverAuthentication.token ?? '';
   }
 
   void updateCurrentStatus(Status value) {

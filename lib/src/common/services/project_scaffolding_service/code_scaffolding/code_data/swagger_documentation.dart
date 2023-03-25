@@ -17,7 +17,7 @@ String swaggerDocumentation({
       data +=
           '    ${element.collectionName.capitalize()}Model:\n      type: object\n      properties:\n';
       for (var field in attributes) {
-        if (field.collection == element) {
+        if (field.collection.collectionName == element.collectionName) {
           data +=
               '        ${field.fieldName}:\n         type: ${field.fieldDataType}\n';
         }
@@ -27,7 +27,8 @@ String swaggerDocumentation({
   }
 
   String authentication() {
-    return serverAuthentication.authenticationLevel == AuthenticationLevel.TOKEN
+    return serverAuthentication.authenticationLevel ==
+            AuthenticationLevel.TOKEN.name
         ? '''
   securitySchemes:
     bearerAuth:            
@@ -36,7 +37,8 @@ String swaggerDocumentation({
 security:
   - bearerAuth: []  
 '''
-        : serverAuthentication.authenticationLevel == AuthenticationLevel.BASIC
+        : serverAuthentication.authenticationLevel ==
+                AuthenticationLevel.BASIC.name
             ? '''
   securitySchemes:
     basicAuth:    

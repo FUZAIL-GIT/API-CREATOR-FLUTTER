@@ -1,25 +1,36 @@
+// Importing required packages
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:node_server_maker/src/common/enums/enums.dart';
-import 'package:node_server_maker/src/common/extensions/extension.dart';
-import 'package:node_server_maker/src/pages/home_page/controller.dart';
+
+// Importing models, extensions, controllers ,enums, and data service
+import '../../../enums/enums.dart';
 import '../../../models/attribute_model.dart';
 import '../../../models/collection_model.dart';
-import '../data_service/data_service.dart';
 import '../../../models/server_auth_model.dart';
+import '../data_service/data_service.dart';
+import 'package:node_server_maker/src/common/extensions/extension.dart';
+import '../../../../pages/home_page/controller.dart';
+
+// Importing code data
 import 'code_data/middleware_template.dart';
 import 'code_data/server_template.dart';
 import 'code_data/swagger_documentation.dart';
 
+// Creating instance of GetxController
 class CodeScaffoldingService extends GetxController {
+  // Creating instance of HomeController
   HomeController homeController = Get.find();
+
+  // Creating instance variables
   late final Directory projectDir;
   late final String workingDirectory;
   late final Directory? downloadDirectoryPath;
   DataService dataService = DataService();
+
+  // Method to run a command
   Future<bool> runCommand({
     required String workingDirectory,
     required String command,
@@ -51,28 +62,67 @@ class CodeScaffoldingService extends GetxController {
     required bool isPagination,
     required bool isOpenInVsCode,
     required bool isInstallPackages,
+    bool isEdit = false,
     required ServerAuthentication serverAuthentication,
   }) async {
     try {
       downloadDirectoryPath = await dataService.downloadDirectory();
       projectDir = Directory("${downloadDirectoryPath!.path}/$projectName/app");
 
-      if (!projectDir.existsSync()) {
-        homeController.updateCurrentStatus(Status.LOADING);
-        await projectSetup(
-            projectName: projectName,
-            isAutomaticallyInstallPackages: isInstallPackages,
-            attributes: attributes,
-            collections: collections,
-            mongoDbUrl: mongoDbUrl,
-            serverAuthentication: serverAuthentication,
-            isTimestamp: isTimestamp,
-            isPagination: isPagination,
-            isOpenInVsCode: isOpenInVsCode,
-            isInstallPackages: isInstallPackages);
-      } else {
-        log("folder with this name already exist");
-        homeController.throwError('folder with this name alread exist');
+      if (!isEdit) {
+        if (!projectDir.existsSync()) {
+          homeController.updateCurrentStatus(Status.LOADING);
+          await projectSetup(
+              projectName: projectName,
+              isAutomaticallyInstallPackages: isInstallPackages,
+              attributes: attributes,
+              collections: collections,
+              mongoDbUrl: mongoDbUrl,
+              serverAuthentication: serverAuthentication,
+              isTimestamp: isTimestamp,
+              isPagination: isPagination,
+              isOpenInVsCode: isOpenInVsCode,
+              isInstallPackages: isInstallPackages);
+        } else {
+          log("folder with this name already exist");
+          homeController.throwError('folder with this name alread exist');
+        }
+      } else if (isEdit) {
+        if (projectDir.existsSync()) {
+          try {
+            Directory("${downloadDirectoryPath!.path}/$projectName")
+                .deleteSync(recursive: true);
+          } catch (e) {
+            log('', error: e);
+          }
+          homeController.updateCurrentStatus(Status.LOADING);
+          await projectSetup(
+              projectName: projectName,
+              isAutomaticallyInstallPackages: isInstallPackages,
+              attributes: attributes,
+              collections: collections,
+              mongoDbUrl: mongoDbUrl,
+              serverAuthentication: serverAuthentication,
+              isTimestamp: isTimestamp,
+              isPagination: isPagination,
+              isOpenInVsCode: isOpenInVsCode,
+              isInstallPackages: isInstallPackages);
+        } else {
+          homeController.updateCurrentStatus(Status.LOADING);
+          // File file = File(projectDir.path);
+          // file.deleteSync();
+          await projectSetup(
+              projectName: projectName,
+              isAutomaticallyInstallPackages: isInstallPackages,
+              attributes: attributes,
+              collections: collections,
+              mongoDbUrl: mongoDbUrl,
+              serverAuthentication: serverAuthentication,
+              isTimestamp: isTimestamp,
+              isPagination: isPagination,
+              isOpenInVsCode: isOpenInVsCode,
+              isInstallPackages: isInstallPackages);
+        }
       }
     } catch (e) {
       log('', error: e);
@@ -205,7 +255,8 @@ class CodeScaffoldingService extends GetxController {
 
     // Create the sub-folders
     await controllerFolder.create(recursive: true);
-    if (serverAuthentication.authenticationLevel != AuthenticationLevel.NONE) {
+    if (serverAuthentication.authenticationLevel !=
+        AuthenticationLevel.NONE.name) {
       await middlewareFolder.create(recursive: true);
     }
     await modelFolder.create(recursive: true);
@@ -265,7 +316,8 @@ class CodeScaffoldingService extends GetxController {
     File middlewareFile = File('${projectDir.path}\\middleware\\middleware.js');
     String middleware =
         middlewareTemplate(serverAuthentication: serverAuthentication);
-    if (serverAuthentication.authenticationLevel != AuthenticationLevel.NONE) {
+    if (serverAuthentication.authenticationLevel !=
+        AuthenticationLevel.NONE.name) {
       middlewareFile.writeAsStringSync(middleware);
     }
     // ############################################################################

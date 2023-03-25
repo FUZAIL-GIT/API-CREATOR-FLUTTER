@@ -4,9 +4,9 @@ import '../../../../models/server_auth_model.dart';
 
 String middlewareTemplate(
     {required ServerAuthentication serverAuthentication}) {
-  String authentication = serverAuthentication.authenticationLevel ==
-          AuthenticationLevel.TOKEN
-      ? '''
+  String authentication =
+      serverAuthentication.authenticationLevel == AuthenticationLevel.TOKEN.name
+          ? '''
 const {authenticationCredentials } = require("../config/config.js")
 
 exports.bearerAuthentication = (req, res, next) => {
@@ -23,8 +23,9 @@ exports.bearerAuthentication = (req, res, next) => {
     }
   }
 '''
-      : serverAuthentication.authenticationLevel == AuthenticationLevel.BASIC
-          ? '''
+          : serverAuthentication.authenticationLevel ==
+                  AuthenticationLevel.BASIC.name
+              ? '''
 const {authenticationCredentials } = require("../config/config.js")
 
   exports.basicAuthentication = (req, res, next) => {
@@ -46,6 +47,6 @@ const {authenticationCredentials } = require("../config/config.js")
     }
   }
 '''
-          : '';
+              : '';
   return authentication;
 }
