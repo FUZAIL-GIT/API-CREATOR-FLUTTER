@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:node_server_maker/src/common/routes/routes.dart';
+import 'package:api_creator/src/common/routes/routes.dart';
 import 'src/common/routes/app_pages.dart';
 import 'src/common/style/theme.dart';
 

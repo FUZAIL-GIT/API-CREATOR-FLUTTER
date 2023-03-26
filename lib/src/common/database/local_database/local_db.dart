@@ -3,10 +3,13 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:path_provider/path_provider.dart';
+
 class LocalDatabase {
   // Define the file for the collection
   static Future<File> _collectionFile({required String collectionName}) async {
-    return File('$collectionName.json');
+    Directory directory = await getApplicationDocumentsDirectory();
+    return File('${directory.path}/$collectionName.json');
   }
 
   // Create a collection

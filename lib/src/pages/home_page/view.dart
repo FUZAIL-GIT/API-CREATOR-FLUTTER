@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:node_server_maker/src/common/models/project_details_model.dart';
-import 'package:node_server_maker/src/common/routes/routes.dart';
-import 'package:node_server_maker/src/pages/home_page/controller.dart';
+import 'package:api_creator/src/common/models/project_details_model.dart';
+import 'package:api_creator/src/common/routes/routes.dart';
+import 'package:api_creator/src/pages/home_page/controller.dart';
 import 'package:get/get.dart';
-import 'package:node_server_maker/src/pages/home_page/widgets.dart';
+import 'package:api_creator/src/pages/home_page/widgets.dart';
 
 class HomeScreen extends GetView<HomeController> {
   const HomeScreen({super.key});

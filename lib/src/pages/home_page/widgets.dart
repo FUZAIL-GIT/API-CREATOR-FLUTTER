@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:node_server_maker/src/common/enums/enums.dart';
+import 'package:api_creator/src/common/enums/enums.dart';
 import 'controller.dart';
 import '../../common/models/collection_model.dart';
 

@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:node_server_maker/src/common/models/project_details_model.dart';
-import 'package:node_server_maker/src/common/routes/routes.dart';
-import 'package:node_server_maker/src/pages/dashboard_page/controller.dart';
+import 'package:api_creator/src/common/models/project_details_model.dart';
+import 'package:api_creator/src/common/routes/routes.dart';
+import 'package:api_creator/src/pages/dashboard_page/controller.dart';
 
 // Define class DashboardScreen which extends GetView with Generic type DashboardController
 class DashboardScreen extends GetView<DashboardController> {

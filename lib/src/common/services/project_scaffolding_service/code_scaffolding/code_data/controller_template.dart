@@ -1,4 +1,4 @@
-import 'package:node_server_maker/src/common/extensions/extension.dart';
+import 'package:api_creator/src/common/extensions/extension.dart';
 import '../../../../models/attribute_model.dart';
 import '../../../../models/collection_model.dart';
 

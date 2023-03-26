@@ -1,4 +1,4 @@
-import 'package:node_server_maker/src/common/models/server_details_model.dart';
+import 'package:api_creator/src/common/models/server_details_model.dart';
 
 class ProjectDetails {
   int?  id;

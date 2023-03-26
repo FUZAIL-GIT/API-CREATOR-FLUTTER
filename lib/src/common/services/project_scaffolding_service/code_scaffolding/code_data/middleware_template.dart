@@ -1,4 +1,4 @@
-import 'package:node_server_maker/src/common/enums/enums.dart';
+import 'package:api_creator/src/common/enums/enums.dart';
 
 import '../../../../models/server_auth_model.dart';
 
