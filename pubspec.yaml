@@ -60,4 +60,6 @@ msix_config:
   publisher_display_name: Muhammad Fuzail Zaman
   identity_name: api-creator-001
   msix_version: 1.0.0.0
+  languages: en-us
+  capabilities: "internetClient"
   logo_path: "assets/icon/app_logo.png"
