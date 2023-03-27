@@ -109,7 +109,7 @@ class HomeController extends GetxController {
     if (collectionNameKey.currentState!.validate()) {
       listOfCollections.add(
         Collection(
-          collectionName: collectionName.text.trim(),
+          collectionName: collectionName.text.replaceAll(' ', ''),
           isTimeStamp: _isTimeStamp.value,
           isPagination: _isPagination.value,
         ),
@@ -176,7 +176,7 @@ class HomeController extends GetxController {
       if (!isAlreadyExist) {
         listOfAttributes.add(
           Attribute(
-            fieldName: fieldName.text.trim(),
+            fieldName: fieldName.text.replaceAll(' ', ''),
             fieldDataType: _selectedDataType.value,
             isRequired: _isRequiredField.value,
             isUnique: _isUniqueField.value,

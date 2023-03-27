@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:api_creator/src/common/enums/enums.dart';
@@ -76,6 +78,9 @@ Step collectionPrompt({
                   validator: (value) {
                     if (value!.isEmpty || value == '') {
                       return 'Please Enter Collection Name';
+                    }
+                    if (isNumberic(value)) {
+                      return 'Numbers not allowed';
                     }
                     if (value.isNotEmpty || value != '') {
                       bool isAlreadyExist = false;
@@ -456,6 +461,9 @@ Future<void> attributePrompt({
                               if (value!.isEmpty || value == '') {
                                 return 'Please Enter Field Name';
                               }
+                              if (isNumberic(value)) {
+                                return 'Numbers not allowed';
+                              }
                               return null;
                             },
                             controller: controller.fieldName,
@@ -742,4 +750,14 @@ Step database({
     isActive: controller.currentStep >= 0,
     state: controller.currentStep > 2 ? StepState.complete : StepState.disabled,
   );
+}
+
+bool isNumberic(String value) {
+  //numbers validation
+  for (var i = 0; i < value.length; i++) {
+    if (double.tryParse(value[i]) != null) {
+      return true;
+    }
+  }
+  return false;
 }
