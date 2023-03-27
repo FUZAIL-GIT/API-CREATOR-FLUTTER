@@ -72,6 +72,7 @@ Step collectionPrompt({
               child: Form(
                 key: controller.collectionNameKey,
                 child: TextFormField(
+                  keyboardType: TextInputType.text,
                   validator: (value) {
                     if (value!.isEmpty || value == '') {
                       return 'Please Enter Collection Name';
@@ -450,7 +451,7 @@ Future<void> attributePrompt({
                         child: Form(
                           key: controller.fieldNameKey,
                           child: TextFormField(
-                            // initialValue: field?.fieldName ?? '',
+                            keyboardType: TextInputType.text,
                             validator: (value) {
                               if (value!.isEmpty || value == '') {
                                 return 'Please Enter Field Name';
