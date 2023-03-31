@@ -1,4 +1,4 @@
-# Node Server Maker
+# 🔥 Node Server Maker
 
 Node Server Maker is a Flutter application that automates the process of creating a Node.js server with MongoDB using Express. With this application, you can create a project with pre-installed packages that automatically opens in VS Code after it's created. You can also write code inside the project for multiple APIs, which means multiple collections with pagination and timestamp features, and create schemas using a user-friendly GUI. Additionally, the application can add authentication for your server, including bearer and basic authentication.
 
@@ -41,8 +41,13 @@ To use the Node Server Maker application, follow these steps:
 
 For any inquiries or feedback, please feel free to contact me at:
 
-- Google: [google.com/mohammadfuzailzaman@gmail.com](https://www.google.com/mohammadfuzailzaman@gmail.com)
-- LinkedIn: [linkedin.com/in/YourName](https://www.linkedin.com/in/YourName)
+[![GitHub DaymaManish](https://img.shields.io/github/followers/FUZAIL-GIT?label=follow&style=social)](https://github.com/FUZAIL-GIT)
+[![Gmail Badge](https://img.shields.io/badge/-mohammadfuzailzaman@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:mohammadfuzailzaman@gmail.com)](mailto:mohammadfuzailzaman@gmail.com)
+
+<!-- - Google: [google.com/mohammadfuzailzaman@gmail.com](https://www.google.com/mohammadfuzailzaman@gmail.com)
+- LinkedIn: [linkedin.com/in/YourName](https://www.linkedin.com/in/YourName) -->
+
+Star⭐ the repo if you like the idea.
 
 ## Contributing
 
