@@ -40,19 +40,19 @@ To use the Node Server Maker application, follow these steps:
 
 ## Screenshots
 
-![Screenshot 1](screenshots/screenshot1.png)
+![Screenshot 1](screenshots/screenshot_1.png)
 
-![Screenshot 2](screenshots/screenshot2.png)
+![Screenshot 2](screenshots/screenshot_2.png)
+
+![Screenshot 3](screenshots/screenshot_3.png)
 
 ## Contact
 
 For any inquiries or feedback, please feel free to contact me at:
 
-[![GitHub DaymaManish](https://img.shields.io/github/followers/FUZAIL-GIT?label=follow&style=social)](https://github.com/FUZAIL-GIT)
+[![GitHub FUZAIL-GIT](https://img.shields.io/github/followers/FUZAIL-GIT?label=follow&style=social)](https://github.com/FUZAIL-GIT)
 [![Gmail Badge](https://img.shields.io/badge/-mohammadfuzailzaman@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:mohammadfuzailzaman@gmail.com)](mailto:mohammadfuzailzaman@gmail.com)
-
-<!-- - Google: [google.com/mohammadfuzailzaman@gmail.com](https://www.google.com/mohammadfuzailzaman@gmail.com)
-- LinkedIn: [linkedin.com/in/YourName](https://www.linkedin.com/in/YourName) -->
+[![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mohammad-fuzail-zaman-670731239/)
 
 Star⭐ the repo if you like the idea.
 
