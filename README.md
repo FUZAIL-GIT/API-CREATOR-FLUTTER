@@ -17,6 +17,13 @@ One of the most feature-rich aspects of Node Server Maker is that it can create 
 
 To install the Node Server Maker application, follow these steps:
 
+1. download the code 
+2. Unzip and copy the "api-creator-install" folder
+3. Paste that folder in the desire download location of the app
+4. double click on the api-creator.exe file 
+
+## Cloning
+
 1. Clone the repository.
 2. Open the project in Flutter.
 3. Run the application on an emulator or physical device.
