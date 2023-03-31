@@ -1,8 +1,8 @@
-# 🔥 Node Server Maker
+# 🔥 API-CREATOR
 
-Node Server Maker is a Flutter application that automates the process of creating a Node.js server with MongoDB using Express. With this application, you can create a project with pre-installed packages that automatically opens in VS Code after it's created. You can also write code inside the project for multiple APIs, which means multiple collections with pagination and timestamp features, and create schemas using a user-friendly GUI. Additionally, the application can add authentication for your server, including bearer and basic authentication.
+API-CREATOR is a Flutter application that automates the process of creating a Node.js server with MongoDB using Express. With this application, you can create a project with pre-installed packages that automatically opens in VS Code after it's created. You can also write code inside the project for multiple APIs, which means multiple collections with pagination and timestamp features, and create schemas using a user-friendly GUI. Additionally, the application can add authentication for your server, including bearer and basic authentication.
 
-One of the most feature-rich aspects of Node Server Maker is that it can create a whole documentation of your API in OpenAPI automatically. All you need to do is go to the URL and test your APIs.
+One of the most feature-rich aspects of API-CREATOR is that it can create a whole documentation of your API in OpenAPI automatically. All you need to do is go to the URL and test your APIs.
 
 ## Features
 
@@ -15,7 +15,7 @@ One of the most feature-rich aspects of Node Server Maker is that it can create 
 
 ## Installation
 
-To install the Node Server Maker application, follow these steps:
+To install the API-CREATOR application, follow these steps:
 
 1. download the code 
 2. Unzip and copy the "api-creator-install" folder
@@ -30,7 +30,7 @@ To install the Node Server Maker application, follow these steps:
 
 ## Usage
 
-To use the Node Server Maker application, follow these steps:
+To use the API-CREATOR application, follow these steps:
 
 1. Create a new project.
 2. Write code for your server, APIs, and schemas using the user-friendly GUI.
@@ -58,7 +58,7 @@ Star⭐ the repo if you like the idea.
 
 ## Contributing
 
-If you want to contribute to the Node Server Maker application, please follow these steps:
+If you want to contribute to the API-CREATOR application, please follow these steps:
 
 1. Fork the repository.
 2. Create a new branch for your changes.
@@ -68,4 +68,4 @@ If you want to contribute to the Node Server Maker application, please follow th
 
 ## License
 
-Node Server Maker is licensed under the MIT License. See the LICENSE file for more information.
+API-CREATOR is licensed under the MIT License. See the LICENSE file for more information.
