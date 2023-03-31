@@ -1,7 +1,11 @@
+import 'dart:developer';
+
+import 'package:api_creator/src/common/services/keyboard_shortcuts/keyboard_shortcuts.dart';
 import 'package:flutter/material.dart';
 import 'package:api_creator/src/common/models/project_details_model.dart';
 import 'package:api_creator/src/common/routes/routes.dart';
 import 'package:api_creator/src/pages/home_page/controller.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:api_creator/src/pages/home_page/widgets.dart';
 
@@ -24,39 +28,43 @@ class HomeScreen extends GetView<HomeController> {
             icon: const Icon(Icons.arrow_back_ios_new)),
       ),
       body: Obx(
-        () => Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.05,
-          ),
-          child: Stepper(
-            controlsBuilder: (BuildContext context, ControlsDetails details) {
-              return stepperButton(
-                context: context,
-                details: details,
-                homeController: controller,
-              );
-            },
-            type: StepperType.vertical,
-            physics: const BouncingScrollPhysics(),
-            currentStep: controller.currentStep,
-            onStepTapped: (step) => controller.tapped,
-            onStepContinue: controller.continued,
-            onStepCancel: controller.cancel,
-            steps: [
-              inputStepPrompt(
-                controller: controller,
-                context: context,
-                textEditingController: controller.projectName,
-                formKey: controller.projectNameKey,
-                index: 0,
-                label: 'Project',
-                hintText: 'Project Name',
-                validation: true,
-              ),
-              collectionPrompt(controller: controller, context: context),
-              database(context: context, controller: controller),
-              finishSection(controller: controller, context: context),
-            ],
+        () => KeyboardShortcut(
+          focusNode: controller.focusNode,
+          shortCuts: controller.keyboardShortcuts(context),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.05,
+            ),
+            child: Stepper(
+              controlsBuilder: (BuildContext context, ControlsDetails details) {
+                return stepperButton(
+                  context: context,
+                  details: details,
+                  homeController: controller,
+                );
+              },
+              type: StepperType.vertical,
+              physics: const BouncingScrollPhysics(),
+              currentStep: controller.currentStep,
+              onStepTapped: (step) => controller.tapped,
+              onStepContinue: controller.continued,
+              onStepCancel: controller.cancel,
+              steps: [
+                inputStepPrompt(
+                  controller: controller,
+                  context: context,
+                  textEditingController: controller.projectName,
+                  formKey: controller.projectNameKey,
+                  index: 0,
+                  label: 'Project',
+                  hintText: 'Project Name',
+                  validation: true,
+                ),
+                collectionPrompt(controller: controller, context: context),
+                database(context: context, controller: controller),
+                finishSection(controller: controller, context: context),
+              ],
+            ),
           ),
         ),
       ),

@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'package:api_creator/src/pages/home_page/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:api_creator/src/common/enums/enums.dart';
 import 'package:api_creator/src/common/models/project_details_model.dart';
@@ -16,6 +18,7 @@ import '../../common/models/server_auth_model.dart';
 class HomeController extends GetxController {
   // STEP 1: Stepper
   final RxInt _currentStep = 0.obs;
+  FocusNode focusNode = FocusNode();
   int get currentStep => _currentStep.value;
   void tapped(int value) {
     _currentStep.value = value;
@@ -104,6 +107,7 @@ class HomeController extends GetxController {
   bool get isPagination => _isPagination.value;
   TextEditingController collectionName = TextEditingController();
   GlobalKey<FormState> collectionNameKey = GlobalKey<FormState>();
+  FocusNode collectionNameFocusNode = FocusNode();
   void addCollectionToList() {
     // handle logic for adding collection to list
     if (collectionNameKey.currentState!.validate()) {
@@ -157,6 +161,7 @@ class HomeController extends GetxController {
   String get selectedDataType => _selectedDataType.value;
   TextEditingController fieldName = TextEditingController();
   GlobalKey<FormState> fieldNameKey = GlobalKey<FormState>();
+  FocusNode fieldNameFocusNode = FocusNode();
   void selectCollection(Collection collection) {
     // handle logic for selecting collection
     _selectedCollection.value = collection;
@@ -284,14 +289,19 @@ class HomeController extends GetxController {
 
   // STEP 4: Server Project
   TextEditingController mongoDbUrl = TextEditingController();
+  FocusNode mongoDbUrlFocusNode = FocusNode();
   GlobalKey<FormState> mongoDbUrlKey = GlobalKey<FormState>();
   TextEditingController authorizationToken = TextEditingController();
   GlobalKey<FormState> authorizationTokenKey = GlobalKey<FormState>();
+  FocusNode authorizationTokenFocusNode = FocusNode();
   TextEditingController userName = TextEditingController();
   GlobalKey<FormState> userNameKey = GlobalKey<FormState>();
+  FocusNode userNameFocusNode = FocusNode();
   TextEditingController password = TextEditingController();
   GlobalKey<FormState> passwordKey = GlobalKey<FormState>();
+  FocusNode passwordFocusNode = FocusNode();
   TextEditingController projectName = TextEditingController();
+  FocusNode projectNameFocusNode = FocusNode();
   GlobalKey<FormState> projectNameKey = GlobalKey<FormState>();
   int id = 0;
   RxString errorMessage = ''.obs;
@@ -461,6 +471,56 @@ class HomeController extends GetxController {
         projectDetails.servertDetails.serverAuthentication.token ?? '';
   }
 
+// keyboard shortcut settings
+  Map<Set<LogicalKeyboardKey>, VoidCallback> keyboardShortcuts(
+      BuildContext buildContext) {
+    return {
+      {LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.keyN}: continued,
+      {LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.keyC}:
+          currentStep == 1 ? addCollectionToList : () {},
+      {LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.arrowDown}:
+          currentStep == 1 ? collectionScrollUp : () {},
+      {LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.arrowUp}:
+          currentStep == 1 ? collectionScrollDown : () {},
+      {LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.shift}:
+          currentStep == 1 ? addFieldToCollection : () {},
+      {LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.keyA}:
+          currentStep == 1
+              ? () {
+                  attributePrompt(context: buildContext);
+                }
+              : () {},
+    };
+  }
+
+  void collectionScrollUp() {
+    if (listOfCollections.length > 1) {
+      for (var i = 0; i < listOfCollections.length; i++) {
+        if (listOfCollections[i].collectionName ==
+            _selectedCollection.value.collectionName) {
+          if (i + 1 < listOfCollections.length) {
+            _selectedCollection.value = listOfCollections[++i];
+          }
+          break;
+        }
+      }
+    }
+  }
+
+  void collectionScrollDown() {
+    if (listOfCollections.length > 1) {
+      for (var i = 0; i < listOfCollections.length; i++) {
+        if (listOfCollections[i].collectionName ==
+            _selectedCollection.value.collectionName) {
+          if (i > 0) {
+            _selectedCollection.value = listOfCollections[--i];
+          }
+          break;
+        }
+      }
+    }
+  }
+
   void updateCurrentStatus(Status value) {
     // handle logic for changing status
     _currentStatus.value = value;
@@ -487,6 +547,9 @@ class HomeController extends GetxController {
   void onInit() async {
     _automaticallyInstallPackages.value =
         await InternetConnectivity().isInternetAvailable();
+    focusNode.requestFocus();
+
+    projectNameFocusNode.requestFocus();
     super.onInit();
   }
 }

@@ -27,6 +27,8 @@ Step inputStepPrompt({
         Form(
           key: formKey,
           child: TextFormField(
+            autofocus: true,
+            focusNode: controller.projectNameFocusNode,
             validator: (value) {
               if (value!.isEmpty || value == '') {
                 return 'Please Enter $label Name';
@@ -74,6 +76,8 @@ Step collectionPrompt({
               child: Form(
                 key: controller.collectionNameKey,
                 child: TextFormField(
+                  autofocus: true,
+                  focusNode: controller.collectionNameFocusNode,
                   keyboardType: TextInputType.text,
                   validator: (value) {
                     if (value!.isEmpty || value == '') {
@@ -286,8 +290,8 @@ Step collectionPrompt({
                                       child: IconButton(
                                         onPressed: () {
                                           attributePrompt(
-                                              context: context,
-                                              controller: controller);
+                                            context: context,
+                                          );
                                         },
                                         icon: Icon(
                                           Icons.add_circle_outline_rounded,
@@ -330,7 +334,6 @@ Step collectionPrompt({
                                             );
                                             attributePrompt(
                                               context: context,
-                                              controller: controller,
                                               isEditable: true,
                                               index: index - 1,
                                             );
@@ -431,10 +434,10 @@ Step finishSection({
 
 Future<void> attributePrompt({
   required BuildContext context,
-  required HomeController controller,
   bool isEditable = false,
   int? index,
 }) {
+  HomeController controller = Get.find();
   return showDialog(
       context: context,
       barrierDismissible: false,
@@ -457,6 +460,8 @@ Future<void> attributePrompt({
                           key: controller.fieldNameKey,
                           child: TextFormField(
                             keyboardType: TextInputType.text,
+                            autofocus: true,
+                            focusNode: controller.fieldNameFocusNode,
                             validator: (value) {
                               if (value!.isEmpty || value == '') {
                                 return 'Please Enter Field Name';

@@ -1,5 +1,6 @@
 // Import necessary packages and dependencies
 import 'dart:developer';
+import 'package:api_creator/src/common/responsive/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -31,16 +32,13 @@ class DashboardScreen extends GetView<DashboardController> {
                 alignment: Alignment.topCenter,
                 // color: Theme.of(context).colorScheme.surfaceTint,
                 color: Colors.grey.shade800,
-                padding: width > 800.0 && width < 1200
+                padding: Responsive.isTablet(context)
                     ? EdgeInsets.only(left: 160, right: 150, top: height * 0.08)
-                    : width > 1200.0 && width < 1600.0
+                    : Responsive.isDesktop(context)
                         ? EdgeInsets.only(
                             left: 260, right: 250, top: height * 0.08)
-                        : width > 1600
-                            ? EdgeInsets.only(
-                                left: 360, right: 350, top: height * 0.08)
-                            : EdgeInsets.only(
-                                left: 60, right: 50, top: height * 0.08),
+                        : EdgeInsets.only(
+                            left: 60, right: 50, top: height * 0.08),
                 child: Align(
                   alignment: Alignment.topLeft,
                   child: Text(
@@ -57,16 +55,13 @@ class DashboardScreen extends GetView<DashboardController> {
                 ),
               ),
               Padding(
-                padding: width > 800.0 && width < 1200
+                padding: Responsive.isTablet(context)
                     ? EdgeInsets.only(left: 150, right: 150, top: height * 0.16)
-                    : width > 1200.0 && width < 1600.0
+                    : Responsive.isDesktop(context)
                         ? EdgeInsets.only(
                             left: 250, right: 250, top: height * 0.16)
-                        : width > 1600
-                            ? EdgeInsets.only(
-                                left: 350, right: 350, top: height * 0.16)
-                            : EdgeInsets.only(
-                                left: 50, right: 50, top: height * 0.16),
+                        : EdgeInsets.only(
+                            left: 50, right: 50, top: height * 0.16),
                 child: GridView.builder(
                   itemCount: state!.length + 1,
                   shrinkWrap: true,
@@ -128,23 +123,28 @@ class DashboardScreen extends GetView<DashboardController> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              projectDetails.projectName,
-                              style: TextStyle(
-                                fontSize: 30,
-                                color: Colors.grey.shade800,
-                                fontFamily: 'Orbitron',
-                                fontWeight: FontWeight.bold,
+                            FittedBox(
+                              child: Text(
+                                projectDetails.projectName,
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  color: Colors.grey.shade800,
+                                  fontFamily: 'Orbitron',
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                            Text(
-                              DateFormat.yMMMMEEEEd()
-                                  .format(projectDetails.createdAt),
-                              style: TextStyle(
-                                color: Colors.grey.shade800,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'EncodeSansSC_Condensed',
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                DateFormat.yMMMMEEEEd()
+                                    .format(projectDetails.createdAt),
+                                style: TextStyle(
+                                  color: Colors.grey.shade800,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'EncodeSansSC_Condensed',
+                                ),
                               ),
                             ),
                             const Spacer(),
@@ -153,6 +153,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                 Get.offAllNamed(AppRoutes.HOME,
                                     arguments: projectDetails);
                               },
+                              padding: EdgeInsets.all(0),
                               icon: Icon(
                                 Icons.edit,
                                 size: 30,
